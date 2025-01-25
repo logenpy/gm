@@ -1,0 +1,32 @@
+[package]
+name = "logenpy-gm"
+version = "0.1.0"
+edition = "2021"
+description = "polygen GM lib"
+license = "Unlicense"
+repository = "https://github.com/logenpy/gm"
+homepage = "https://github.com/logenpy/gm"
+keywords = ["logenpy", "polygen", "gm", "wasm"]
+categories = ["data-structures", "webassembly"]
+authors = ["Resonaa <resonaa@outlook.com>"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+bitfield-struct = "0.10.0"
+glam = { version = "0.29.2", features = ["fast-math"] }
+rand = "0.8.5"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2.100"
+getrandom = { version = "0.2.15", features = ["js"] }
+
+[profile.release]
+lto = true
+panic = "abort"
+codegen-units = 1
+opt-level = "z"
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ["-Os"]

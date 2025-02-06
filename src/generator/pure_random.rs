@@ -2,17 +2,37 @@ use std::f32::consts::PI;
 
 use rand::seq::SliceRandom;
 use rand::Rng;
-#[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::wasm_bindgen;
 
+use super::Generator;
 use crate::gm::GM;
 
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
-impl GM {
-  pub fn random(size: usize, players: usize) -> Self {
-    let mut gm = GM::new(size);
+/// Completely random gm.
+/// 
+/// # Example
+/// 
+/// ```rust
+/// use logenpy_gm::generator::pure_random::Config;
+/// use logenpy_gm::GM;
+/// 
+/// let config = Config {
+///   players: 3,
+///   size: 10
+/// };
+/// 
+/// let gm = GM::generate_pure_random(config);
+/// 
+/// assert_eq!(gm.size(), 10);
+/// ```
+#[wasm_bindgen]
+pub struct Config {
+  pub size: usize,
+  pub players: usize
+}
 
-    let mut rng = rand::thread_rng();
+impl Generator for Config {
+  fn generate(&self, mut rng: impl Rng) -> GM {
+    let mut gm = GM::new(self.size);
 
     for face in &mut gm.faces {
       face.position.x = rng.gen_range(0.0..50.0);
@@ -33,7 +53,7 @@ impl GM {
 
     for land in &mut gm.lands {
       land.set_amount(10u32.pow(rng.gen_range(0..=6)) * rng.gen_range(1..=9));
-      land.set_color(rng.gen_range(0..=players as u32));
+      land.set_color(rng.gen_range(0..=self.players as u32));
       land.set_type(rng.gen());
     }
 

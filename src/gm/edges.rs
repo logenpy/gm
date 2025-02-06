@@ -1,9 +1,8 @@
-#[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::gm::GM;
 
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
+#[wasm_bindgen]
 impl GM {
   pub fn add_edge(&mut self, u: usize, v: usize) {
     self.edges[u].push(v);

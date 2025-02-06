@@ -5,11 +5,10 @@ use std::mem;
 use bitfield_struct::bitfield;
 use rand::distributions::{Distribution, Standard};
 use rand::Rng;
-#[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::wasm_bindgen;
 
-/// Land types.
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
+/// [`Land`] types.
+#[wasm_bindgen]
 #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
 #[repr(u32)]
 pub enum Type {
@@ -40,11 +39,30 @@ impl Distribution<Type> for Standard {
   }
 }
 
-/// ```plaintext
-/// Bits        0        3         8          32
-///             +--------+---------+----------+
-/// Properties  |  Type  |  Color  |  Amount  |
-///             +--------+---------+----------+
+/// GM land.
+///
+/// # Layout
+///
+///  ```plaintext
+/// Bits             24         5        3
+///             +----------+---------+--------+
+/// Properties |  Amount  |  Color  |  Type  |
+///             +----------+---------+--------+
+/// ```
+///
+/// # Example
+///
+/// ```rust
+/// use logenpy_gm::{Land, Type};
+///
+/// let land = Land::new()
+///             .with_amount(161)
+///             .with_color(16)
+///             .with_type(Type::Crown);
+///
+/// assert_eq!(land.amount(), 161);
+/// assert_eq!(land.color(), 16);
+/// assert_eq!(land.r#type(), Type::Crown);
 /// ```
 #[bitfield(u32)]
 pub struct Land {

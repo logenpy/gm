@@ -1,5 +1,4 @@
 use glam::Vec3A;
-#[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::wasm_bindgen;
 
 use crate::gm::GM;
@@ -12,7 +11,7 @@ pub struct Face {
   pub radius: f32
 }
 
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
+#[wasm_bindgen]
 impl GM {
   pub fn position(&mut self, id: usize) -> Box<[f32]> {
     self.faces[id].position.to_array().into()

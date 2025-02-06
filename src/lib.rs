@@ -14,3 +14,6 @@ pub mod land;
 pub mod gm;
 
 pub mod generator;
+
+pub use gm::GM;
+pub use land::{Land, Type};
